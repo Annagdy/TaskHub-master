@@ -107,7 +107,20 @@ def tratar_mensagem(mensagem):
         except Exception as e:
             print(f"Erro server  ao obter tarefas: {e}")
             envia = '0'
-        
+
+    elif l[0] == '6':
+        #exclui tarefa, pelo id
+        id = l[1]
+        try:
+            if banco.excluir_tarefa(id):
+                envia = '1'
+            else:
+                print(f"Erro ao excluir tarefa: {e}")
+                envia = '0'
+        except Exception as e:
+            print(f"Erro ao excluir tarefa: {e}")
+            envia = '0'
+
 
     else:
         envia = "Comando inválido"

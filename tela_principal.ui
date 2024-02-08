@@ -237,29 +237,13 @@ border-color: rgb(54, 54, 54);</string>
      </attribute>
     </widget>
    </widget>
-   <widget class="QPushButton" name="Tarefas">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>630</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:#547dbf; font: 15px bold;</string>
-    </property>
-    <property name="text">
-     <string>TAREFAS</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="Criar">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>630</y>
-      <width>93</width>
-      <height>28</height>
+      <x>340</x>
+      <y>620</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -269,20 +253,20 @@ border-color: rgb(54, 54, 54);</string>
      <string>CRIAR</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Perfil">
+   <widget class="QPushButton" name="excluir_tarefa">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>630</y>
-      <width>93</width>
-      <height>28</height>
+      <x>552</x>
+      <y>620</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: #547dbf; font: 15px bold;</string>
+     <string notr="true">color:#547dbf; font: 15px bold;</string>
     </property>
     <property name="text">
-     <string>PERFIL</string>
+     <string>EXCLUIR </string>
     </property>
    </widget>
   </widget>

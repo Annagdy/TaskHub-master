@@ -30,7 +30,7 @@ class Banco:
             Campos: id, descricao, status, usuario_email (referência à tabela User).
 
         """
-        self.conexao = mysql.connect(host='localhost', database='poo2', user='root', password='admin')
+        self.conexao = mysql.connect(host='localhost', database='poo2', user='root', password='z321')
         self.cursor = self.conexao.cursor()
 
         self.usuario_logado = None
@@ -271,6 +271,27 @@ class Banco:
             print(f"Erro ao obter tarefas: {e}")
             return None
 
+    def excluir_tarefa(self, id_tarefa):
+        """
+        Exclui uma tarefa do banco de dados.
+
+        Parameters
+        ----------
+        id_tarefa : int
+            ID da tarefa.
+
+        Returns
+        -------
+        bool
+            Retorna True se a exclusão for bem-sucedida, False caso contrário.
+        """
+        try:
+            self.cursor.execute("DELETE FROM tarefas WHERE id = %s", (id_tarefa,))
+            self.conexao.commit()
+            return True
+        except Exception as e:
+            print(f"Erro ao excluir tarefa: {e}")
+            return False
         
     
         

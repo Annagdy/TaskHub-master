@@ -124,6 +124,7 @@ class Main(QMainWindow, Ui_Main):
 
         self.tarefa.conf.clicked.connect(self.mostrar_tarefas)
 
+        self.tela_principal.excluir_tarefa.clicked.connect(self.botaoExcluirTarefa)
 
     def mostrar_tarefas(self):
         
@@ -272,8 +273,30 @@ class Main(QMainWindow, Ui_Main):
         except Exception as e:
             print(f"Erro ao criar tarefa: {e}")
         
+    def botaoExcluirTarefa(self):
+        #quero que exclua a tarefa clicada com base no id dela
 
-       
+        # Obtenha o email do usuário logado
+        usuario_email = self.login_tela.email_linha.text()
+
+        # Obtenha as tarefas do usuário
+        tarefas = self.cliente.enviar('5' + '-' + usuario_email)
+
+        # Obtenha o índice da linha selecionada
+        linha_selecionada = self.tela_principal.listaTodo.currentRow()
+
+        # Obtenha o id da tarefa selecionada
+        id_tarefa = tarefas[linha_selecionada][0]
+
+        # Exclua a tarefa
+        recebeu = self.cliente.enviar('6' + '-' + id_tarefa)
+
+        if recebeu == '1':
+            QMessageBox.information(None, 'TaskHub', 'Tarefa excluída com sucesso!')
+        else:
+            QMessageBox.information(None, 'TaskHub', 'Erro ao excluir tarefa. Tente novamente.')
+
+        
 
     def botaoCriar(self):
         self.Qtstack.setCurrentIndex(3)
@@ -291,45 +314,7 @@ class Main(QMainWindow, Ui_Main):
     def abrirTelaPrincipal(self):
         self.Qtstack.setCurrentIndex(2)
 
-# def exibir_tarefas(self):
-#     # Obtenha o email do usuário logado
-#     usuario_email = self.login_tela.email_linha.text()
-    
-#     # Obtenha as tarefas do usuário
-#     tarefas = self.cliente.enviar('5' + '-' + usuario_email)
-    
-    
-#     Tela_Principal.listaTodo.setRowCount(len(tarefas))
-#     Tela_Principal.listaTodo.setColumnCount(6)
 
-#     for i in range (0, len(tarefas)):
-#         for j in range (0, 6):
-#             Tela_Principal.listaTodo.setItem(i, j, QTableWidgetItem(tarefas[i][j]))
-
-#         def mostrar_tarefas(self):
-#             # Obtenha o email do usuário logado
-#             usuario_email = self.login_tela.email_linha.text()
-            
-#             # Obtenha as tarefas do usuário
-#             tarefas = self.cliente.enviar('5' + '-' + usuario_email)
-            
-#             Tela_Principal.show() 
-#             Tela_Principal.listaTodo.setRowCount(len(tarefas))
-#             # #colocar tabela no qttablewidget
-#             self.tela_principal.listaTodo.setColumnCount(6)
-#             self.tela_principal.listaTodo.setHorizontalHeaderLabels(['Título', 'Data Final', 'Prioridade', 'Status', 'Descrição','Criador'])
-        
-#             #mudar largura das colunas
-#             self.tela_principal.listaTodo.setColumnWidth(0, 250)
-#             self.tela_principal.listaTodo.setColumnWidth(1, 150)
-#             self.tela_principal.listaTodo.setColumnWidth(2, 120)
-#             self.tela_principal.listaTodo.setColumnWidth(3, 120)
-#             self.tela_principal.listaTodo.setColumnWidth(4, 400)
-#             self.tela_principal.listaTodo.setColumnWidth(5, 150)
-    
-#             for i in range (0, len(tarefas)):
-#                 for j in range (0, 6):
-#                     Tela_Principal.listaTodo.setItem(i, j, QTableWidgetItem(tarefas[i][j]))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
