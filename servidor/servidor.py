@@ -65,11 +65,11 @@ def tratar_mensagem(mensagem):
             if len(l) >= 8:
                 titulo = l[1]
                 descricao = l[2]
-                data = l[3]
+                data = l[3].replace('/', '-')
                 prioridade = l[4]
                 grupo = l[5]
                 status = l[6]
-                email = l[9]
+                email = l[7]
                 print(l)
                 try:
                     if banco.usuarioExiste(email):
@@ -77,7 +77,7 @@ def tratar_mensagem(mensagem):
                         recebeu = banco.cadastrar_tarefa(titulo, descricao, data, prioridade, grupo, status, email)
                         if recebeu == '1':
                             envia = '1'
-                            print(f'Nova tarefa criada: {titulo}')
+                            print(f'Nova tarefa criada: {titulo}, com status: {status}')
                         else:
                             envia = '0'
                     else:

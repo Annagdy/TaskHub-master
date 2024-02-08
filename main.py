@@ -1,6 +1,7 @@
 import sys
 import typing
 import ast
+import re
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QWidget, QTableWidget, QTableWidgetItem, QCheckBox, QAbstractItemView, QHeaderView, QDateEdit
@@ -131,24 +132,17 @@ class Main(QMainWindow, Ui_Main):
 
         # Obtenha as tarefas do usuário
         tarefas = self.cliente.enviar('5' + '-' + usuario_email)
-        
-        
+
+
         # Junte a string e remova os caracteres desnecessários'
         tarefas_str = ''.join(tarefas).replace('[(', '').replace(')]', '')
-
-        if len(tarefas_str) > 2:
-
-            # Divida a string em partes
-            tarefas_parts = tarefas_str.split(',')
-
-            
-            # Converta as partes em uma tupla
-            ano, mes, dia = map(int, (tarefas_parts[4].replace(' datetime.date(', ''), tarefas_parts[5], tarefas_parts[6].replace(')', '')))
-            data = datetime.date(ano, mes, dia)
-            tarefas_tuple = (int(tarefas_parts[0]), tarefas_parts[1].strip(), tarefas_parts[2].strip(), tarefas_parts[3].strip(), data, tarefas_parts[7].strip(), tarefas_parts[8].strip(), tarefas_parts[9].strip())
-            # Coloque a tupla em uma lista
-            tarefas = [tarefas_tuple]
-
+        padrao = r"datetime\.date\((\d+),\s*(\d+),\s*(\d+)\)"
+        tarefas = re.sub(padrao, r"'\1/\2/\3'", tarefas)
+        tarefas = tarefas.replace("'", '"')
+        
+        tarefas = json.loads(tarefas)
+        print(f"tarefas: {tarefas}")
+        
         self.tela_principal.listaTodo.setRowCount(len(tarefas))
         self.tela_principal.listaTodo.setColumnCount(6)
 
@@ -165,53 +159,14 @@ class Main(QMainWindow, Ui_Main):
         self.tela_principal.listaTodo.setColumnWidth(5, 150)
         
         # Coloque os dados na tabela
-        # for i in range (0, len(tarefas)):
-        #     for j in range (0, 6):
-        #         self.tela_principal.listaTodo.setItem(i, j, QTableWidgetItem(tarefas[i][j]))
+        for i in range (0, len(tarefas)):
+            self.tela_principal.listaTodo.setItem(i, 0, QTableWidgetItem(tarefas[i]["titulo"]))
+            self.tela_principal.listaTodo.setItem(i, 1, QTableWidgetItem(tarefas[i]["data_final"]))
+            self.tela_principal.listaTodo.setItem(i, 2, QTableWidgetItem(tarefas[i]["prioridade"]))
+            self.tela_principal.listaTodo.setItem(i, 3, QTableWidgetItem(tarefas[i]["status"]))
+            self.tela_principal.listaTodo.setItem(i, 4, QTableWidgetItem(tarefas[i]["descricao"]))
+            self.tela_principal.listaTodo.setItem(i, 5, QTableWidgetItem(tarefas[i]["usuario_email"]))
 
-
-
-            
-
-        # self.tela_principal.listaTodo.setItem(0, 0, QTableWidgetItem(tarefas[0][0]))
-
-        # for i in range (0, len(tarefas)):
-        #     for j in range (0, 6):
-        #         self.tela_principal.listaTodo.setItem(i, j, QTableWidgetItem(tarefas[i][j]))
-
-        
-        
-
-
-        # #colocar tabela no qttablewidget
-        # self.tela_principal.listaTodo.setColumnCount(6)
-        # self.tela_principal.listaTodo.setHorizontalHeaderLabels(['Título', 'Data Final', 'Prioridade', 'Status', 'Descrição','Criador'])
-        
-    
-        # #mudar largura das colunas
-        # self.tela_principal.listaTodo.setColumnWidth(0, 250)
-        # self.tela_principal.listaTodo.setColumnWidth(1, 150)
-        # self.tela_principal.listaTodo.setColumnWidth(2, 120)
-        # self.tela_principal.listaTodo.setColumnWidth(3, 120)
-        # self.tela_principal.listaTodo.setColumnWidth(4, 400)
-        # self.tela_principal.listaTodo.setColumnWidth(5, 150)
-
-        # self.Qtstack.currentChanged.connect(self.exibir_tarefas_na_tela)
-
-        # self.tela_principal.listaTodo.setRowCount(0)
-        
-
-
-        # self.tela_principal.listaTodo.setColumnCount(3)
-
-        # self.tela_principal.listaTodo.horizontalHeader().setVisible(False)
-        # self.tela_principal.listaTodo.verticalHeader().setVisible(False)
-
-        # self.tela_principal.listaTodo.setColumnWidth(0, 10)
-
-    
-  
-        # self.tela_principal.listaTodo.setRowCount(0)
     
         
 
@@ -296,7 +251,7 @@ class Main(QMainWindow, Ui_Main):
                 titulo = self.tarefa.title_tarefa.text()
                 descricao = self.tarefa.descricao_tarefa.toPlainText()
                 # Correção: Converta QDate para string usando toString
-                data_final = self.tarefa.data_tarefa.date().toString('yyyy-MM-dd')
+                data_final = self.tarefa.data_tarefa.date().toString('yyyy/MM/dd')
             
 
                 prioridade = self.tarefa.prioridade_tarefa.currentText()
